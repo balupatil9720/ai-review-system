@@ -1,0 +1,509 @@
+{
+  "name": "Customer Review Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1hKz5EepC59n3ixnpALCcA5wN-viYPe-lEj5a3eyKLVE",
+          "mode": "list",
+          "cachedResultName": "Customer Reviews Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1hKz5EepC59n3ixnpALCcA5wN-viYPe-lEj5a3eyKLVE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1753771024,
+          "mode": "list",
+          "cachedResultName": "Form Responses 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1hKz5EepC59n3ixnpALCcA5wN-viYPe-lEj5a3eyKLVE/edit#gid=1753771024"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -880,
+        224
+      ],
+      "id": "ec94f9c5-0bb3-4d69-9e87-368ddbec1b1a",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "zB0fiCFCpIhUCyDA",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "keep": "lastItems"
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        -624,
+        224
+      ],
+      "id": "9cceb715-95ec-4fcf-8e7f-12cc0863f952",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        112,
+        400
+      ],
+      "id": "c2c1852b-7986-48d0-9ac9-29dd04b0845d",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "tjsvs5enPm4Ah5kC",
+          "name": "Gemini API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "da9cc4a4-d624-431d-9318-261a868280b6",
+              "leftValue": "={{ $json.sentiment }}",
+              "rightValue": "Negative",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        736,
+        224
+      ],
+      "id": "324baf3a-4a68-4e6b-9715-44a3d4d234b2",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "sendTo": "shivpatil2602@gmail.com",
+        "subject": "⚠️ Negative Customer Review Alert",
+        "message": "=<h3>🚨 Negative Customer Review Detected</h3>\n\n<p><b>Product:</b> {{ $json.product }}</p>\n<p><b>Email:</b> {{ $json.email }}</p>\n<p><b>Rating:</b> {{ $json.rating }}</p>\n<p><b>Feedback:</b> {{ $json.feedback }}</p>\n\n<hr>\n\n<p><b>Summary:</b> {{ $json.summary }}</p>\n<p><b>Sentiment:</b> {{ $json.sentiment }}</p>\n<p><b>Tone:</b> {{ $json.tone }}</p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1136,
+        208
+      ],
+      "id": "83a877d0-3fdc-44fa-aac2-e788dc8330d3",
+      "name": "Send a message",
+      "webhookId": "6029088c-b239-4f8a-95ec-be9854ed69ee",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "RNhiB8lvujghrjEx",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "563b2d21-67bb-4bbd-95f9-9410ae7c7700",
+              "name": "product",
+              "value": "={{ $json[\"Product Name \"] }}",
+              "type": "string"
+            },
+            {
+              "id": "45bd844f-7552-41d5-9f97-71e91802fa53",
+              "name": "email",
+              "value": "={{ $json[\"  Email  \"] }}",
+              "type": "string"
+            },
+            {
+              "id": "41d23d2d-4604-49fe-8cdc-ba52e273840e",
+              "name": "rating",
+              "value": "={{ $json[\"  Rating  \"] }}",
+              "type": "number"
+            },
+            {
+              "id": "a6bdb6f9-81fa-4eb5-979a-7cb0550413e6",
+              "name": "feedback",
+              "value": "={{ $json[\"  Feedback  \"] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -384,
+        224
+      ],
+      "id": "90fc8e72-2e66-40c8-9ec4-4386caaa8904",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "amount": 8
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -160,
+        224
+      ],
+      "id": "f1bac8c0-7d2d-4fae-a0a2-8728f10cb770",
+      "name": "Wait",
+      "webhookId": "7ce08b0a-7bf3-440c-80ee-e5846207292b"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Analyze the customer review.\n\nReturn ONLY valid JSON:\n{\n  \"summary\": \"...\",\n  \"sentiment\": \"Positive | Neutral | Negative\",\n  \"tone\": \"Happy | Angry | Frustrated | Neutral\"\n}\n\nReview: {{ $json.feedback }}",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        64,
+        224
+      ],
+      "id": "cd10fcb0-4e7c-4cf3-9d3e-7e9b80a1ad28",
+      "name": "Processing"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1C_CjCe_j7Aw4J-TkM0n6bz1rP6c4M3UTBzIRLVmK2NM",
+          "mode": "list",
+          "cachedResultName": "Customer Analysis Results",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1C_CjCe_j7Aw4J-TkM0n6bz1rP6c4M3UTBzIRLVmK2NM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1C_CjCe_j7Aw4J-TkM0n6bz1rP6c4M3UTBzIRLVmK2NM/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $json.email }}",
+            "Product": "={{ $json.product }}",
+            "Rating": "={{ $json.rating }}",
+            "Feedback": "={{ $json.feedback }}",
+            "Summary": "={{ $json.summary }}",
+            "Sentiment": "={{ $json.sentiment }}",
+            "Tone": "={{ $json.tone }}",
+            "Sentiment Score": "={{$json.sentiment_score}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Product",
+              "displayName": "Product",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Rating",
+              "displayName": "Rating",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Feedback",
+              "displayName": "Feedback",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sentiment",
+              "displayName": "Sentiment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tone",
+              "displayName": "Tone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sentiment Score",
+              "displayName": "Sentiment Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        704,
+        0
+      ],
+      "id": "ff9903c9-6dfd-42ab-91b1-03dec9bdeb4a",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sr2Rk21CSlJpTZKD",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2a14a55e-19f2-41fc-a94c-78da26a84308",
+              "name": "product",
+              "value": "={{ $node[\"Edit Fields\"].json.product }}",
+              "type": "string"
+            },
+            {
+              "id": "0e683097-ef8e-4452-8986-4e3fab9a83d6",
+              "name": "email",
+              "value": "={{ $node[\"Edit Fields\"].json.email }}",
+              "type": "string"
+            },
+            {
+              "id": "27ec6edc-9327-404c-ab03-65a7aef2c2de",
+              "name": "rating",
+              "value": "={{ $node[\"Edit Fields\"].json.rating }}",
+              "type": "string"
+            },
+            {
+              "id": "1b303cbf-c0ed-48b3-b904-b96296114724",
+              "name": "feedback",
+              "value": "={{ $node[\"Edit Fields\"].json.feedback }}",
+              "type": "string"
+            },
+            {
+              "id": "8aa3603b-f9c6-44c0-8377-6ec403d1116f",
+              "name": "summary",
+              "value": "={{ JSON.parse($json.text.replace(/```json|```/g, '')).summary }}",
+              "type": "string"
+            },
+            {
+              "id": "9ff9fd64-582e-455b-a8ba-8dc52901aaeb",
+              "name": "sentiment",
+              "value": "={{ JSON.parse($json.text.replace(/```json|```/g, '')).sentiment }}",
+              "type": "string"
+            },
+            {
+              "id": "41d8d7f3-5fb1-4343-a3a8-428d5108b396",
+              "name": "tone",
+              "value": "={{ JSON.parse($json.text.replace(/```json|```/g, '')).tone }}",
+              "type": "string"
+            },
+            {
+              "id": "c02a53ce-a410-452c-b2a8-a708ade2f227",
+              "name": "sentiment_score",
+              "value": "={{    $json.sentiment === \"Positive\" ? (0.8 + Math.random()*0.2) :   $json.sentiment === \"Neutral\"  ? (0.4 + Math.random()*0.3) :   (Math.random()*0.3) }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        448,
+        224
+      ],
+      "id": "4559beb7-56bc-41a5-a868-8b506c0ec137",
+      "name": "Edit Fields1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Processing",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        []
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Processing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Processing": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "fa4d12f1-7b3c-4e4a-87ad-7ac6ebaeb8e7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9a22bb1996e4f708c693b0f97b9ba8bb158cfc81cb5ea0c499564690da104fc7"
+  },
+  "id": "0dEI0nvwh1hi3xJn",
+  "tags": []
+}
