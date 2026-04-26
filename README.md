@@ -6,7 +6,7 @@ An end-to-end intelligent system that automates the collection, analysis, and mo
 
 ## 📌 Overview
 
-This project captures customer feedback from Google Forms, processes it using AI models to extract meaningful insights (summary, sentiment, tone), and triggers alerts for critical (negative) reviews. The processed data is stored and visualized through an interactive dashboard.
+This project captures customer feedback from Google Forms, processes it using AI models to extract meaningful insights (language, translation, summary, sentiment, tone), and triggers alerts for critical (negative) reviews. The processed data is stored and visualized through an interactive dashboard.
 
 ---
 
@@ -18,9 +18,14 @@ This project captures customer feedback from Google Forms, processes it using AI
 * 🧠 **AI-Based Analysis**
   Uses LLMs (Gemini/OpenAI) to:
 
+  * Detect review language
+  * Translate non-English reviews into English
   * Generate concise summaries
   * Detect sentiment (Positive / Neutral / Negative)
   * Classify tone (e.g., Frustrated, Satisfied)
+
+* 🌍 **Multi-language Support**
+  Automatically detects the language of the review and translates it into English, enabling global usability.
 
 * 📊 **Sentiment Scoring System**
   Converts sentiment into numeric scores for analytics:
@@ -33,7 +38,14 @@ This project captures customer feedback from Google Forms, processes it using AI
   Automatically sends email notifications for negative reviews.
 
 * 📁 **Data Storage**
-  Stores processed insights in structured Google Sheets.
+  Stores processed insights in structured Google Sheets, including:
+
+  * Original Language
+  * Translated Review
+  * Summary
+  * Sentiment
+  * Tone
+  * Sentiment Score
 
 * 📈 **Interactive Dashboard**
   Built using React + Recharts:
@@ -82,8 +94,8 @@ ai-review-analysis/
 │
 ├── dashboard/              # React dashboard (Vite)
 ├── n8n/
-│   └── workflow.json      # Exported automation workflow
-├── screenshots/           # UI and workflow images
+│   └── workflow.json       # Exported automation workflow
+├── screenshots/            # UI and workflow images
 ├── README.md
 └── .gitignore
 ```
@@ -107,6 +119,8 @@ ai-review-analysis/
 
 ### Phase 3 — AI Processing
 
+* Language detection
+* Translation (if non-English)
 * Summary generation
 * Sentiment detection
 * Tone classification
@@ -119,9 +133,9 @@ ai-review-analysis/
 
 * IF condition:
 
-  ```
-  sentiment === "Negative"
-  ```
+```
+sentiment === "Negative"
+```
 
 ### Phase 6 — Alert System
 
@@ -141,6 +155,7 @@ ai-review-analysis/
 
 * 📈 Sentiment Distribution (Pie Chart)
 * 📊 Product Ratings (Bar Chart)
+* 🌍 Display of multilingual processed data
 * Real-time data fetched from Google Sheets API
 
 ---
@@ -192,7 +207,6 @@ npm run dev
 ![Email Alert](./screenshots/email1.jpeg)
 ![Email Alert](./screenshots/email.jpeg)
 
-
 ---
 
 ## 🌟 Key Highlights
@@ -201,6 +215,7 @@ npm run dev
 * Real-time event-driven architecture
 * No manual intervention required
 * Combines AI + Automation + Visualization
+* 🌍 Supports multilingual customer feedback
 
 ---
 
@@ -215,7 +230,6 @@ npm run dev
 
 ## 🚀 Future Enhancements
 
-* Multi-language support
 * Auto-reply generation
 * Slack / WhatsApp alerts
 * Advanced analytics dashboard
@@ -226,7 +240,3 @@ npm run dev
 ## 👨‍💻 Author
 
 **Balu Patil**
-
-
-
-
