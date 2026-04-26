@@ -189,6 +189,7 @@ npm run dev
 
 ### 📧 Email Alert Example
 
+![Email Alert](./screenshots/email1.jpeg)
 ![Email Alert](./screenshots/email.jpeg)
 
 
