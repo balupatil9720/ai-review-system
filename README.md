@@ -205,11 +205,9 @@ npm run dev
 
 ### 📧 Email Alert Example
 
-### 📧 Email Alert Example
-
 <p align="center">
-  <img src="./screenshots/email1.jpeg" width="45%" />
-  <img src="./screenshots/email.jpeg" width="45%" />
+  <img src="./screenshots/email1.jpeg" width="45%"  height="500" />
+  <img src="./screenshots/email.jpeg" width="45%" height="500" />
 </p>
 
 ---
