@@ -71,8 +71,7 @@ Google Form → Google Sheets → n8n Workflow → AI Processing → Decision En
 
 ### 🔹 Deployment
 
-* AWS EC2 (n8n)
-* Netlify / Vercel (Dashboard)
+* Vercel (Dashboard)
 
 ---
 
@@ -176,11 +175,22 @@ npm run dev
 
 ## 📸 Screenshots
 
-> Add screenshots here:
+### 🔄 n8n Workflow
 
-* n8n Workflow
-* Dashboard UI
-* Email Alert Example
+![n8n Workflow](./screenshots/workflow.png)
+
+---
+
+### 📊 Dashboard UI
+
+![Dashboard UI](./screenshots/dashboard.png)
+
+---
+
+### 📧 Email Alert Example
+
+![Email Alert](./screenshots/email.jpeg)
+
 
 ---
 
@@ -214,7 +224,7 @@ npm run dev
 
 ## 👨‍💻 Author
 
-**Your Name**
+**Balu Patil**
 
 
 
