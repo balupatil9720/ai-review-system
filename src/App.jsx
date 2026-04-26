@@ -86,7 +86,7 @@ function App() {
         {/* 🟣 Bar Chart */}
         <div>
           <h3>Product Ratings</h3>
-          <BarChart width={500} height={300} data={productData}>
+          <BarChart width={800} height={300} data={productData}>
             <XAxis dataKey="Product" />
             <YAxis />
             <Tooltip />
